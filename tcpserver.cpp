@@ -18,7 +18,7 @@ TcpServer::TcpServer(EventBase* base, const ULONG ip, int port) : base_(base) {
   });
 
   client_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-  setsockopt(listener_, SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, (char*)&client_, sizeof(&client_));
+  setsockopt(client_, SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, (char*)&listener_, sizeof(&listener_));
   SetNonblock(client_);
 
   LaunchAccept();
@@ -34,9 +34,10 @@ void TcpServer::OnAccept() {
   conn->SetReadCb([this](const TcpConnection::SPtr& conn, std::string_view buffer) { OnRead(conn, buffer); });
   conn->SetCloseCb([this](const TcpConnection::SPtr& conn) { OnClose(conn); });
   connections_[id] = conn;
+ // SetFileCompletionNotificationModes((HANDLE)client_, FILE_SKIP_COMPLETION_PORT_ON_SUCCESS);
 
   client_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-  setsockopt((SOCKET)channel_->Handle(), SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, (char*)&client_, sizeof(&client_));
+  setsockopt(client_, SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, (char*)&listener_, sizeof(&listener_));
   SetNonblock(client_);
 
   conn->LaunchRead();

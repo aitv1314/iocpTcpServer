@@ -20,7 +20,7 @@ class EventBase {
   void AddChannel(Channel* ch);
   void DelChannel(Channel* ch);
 
-  void Loop();
+  void Loop() ;
   void WakeUp();
 
   auto IOCP() const noexcept { return iocp_; }
@@ -29,11 +29,9 @@ class EventBase {
   HANDLE iocp_;
   std::set<Channel*> channels_;
 
-  static constexpr DWORD MAX_EVENTS = 64;
-  OVERLAPPED_ENTRY events_[MAX_EVENTS];
-  ULONG current_activated_events_{0};
-
   std::unique_ptr<Channel> wake_up_;
+
+  CRITICAL_SECTION lock_;
 };
 
 class Channel {
