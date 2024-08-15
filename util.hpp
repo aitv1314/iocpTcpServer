@@ -4,6 +4,7 @@
 #include <winsock2.h>
 #include <mswsock.h>
 #include <iostream>
+#include <ntstatus.h>
 
 #define CHECK(cond, log)                                                   \
   {                                                                        \
@@ -21,5 +22,5 @@ extern inline void SetNonblock(SOCKET sk) {
 
 extern LPFN_ACCEPTEX lpfnAcceptEx;
 extern void GlobalFnInit();
-
-#endif
+extern bool UnbindIOCP(SOCKET sk);
+#endif // IOCP_UTIL_HPP

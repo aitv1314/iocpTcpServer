@@ -24,7 +24,11 @@ void EventBase::DelChannel(Channel* ch) {
   CHECK(channels_.find(ch) != channels_.end(), "not in");
   channels_.erase(ch);
   if (ch->Handle() == INVALID_HANDLE_VALUE) return;
-  auto res = CreateIoCompletionPort(ch->Handle(), NULL, 0, 0);
+
+  auto res = CancelIo(ch->Handle());
+  CHECK(res, "");
+  res = UnbindIOCP((SOCKET)ch->Handle());
+  CHECK(res, "");
   std::cout << "del channel, fd = " << (uint64_t)ch->Handle() << " res = " << (uint64_t)res << std::endl;
 }
 

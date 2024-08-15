@@ -52,4 +52,4 @@ class Channel {
   Callback cb_;
 };
 
-#endif
+#endif // IOCP_EVENTBASE_HPP

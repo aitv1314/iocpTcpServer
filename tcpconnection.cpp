@@ -18,7 +18,12 @@ void TcpConnection::OnRead(DWORD bytes) {
   std::cout << "buffer read before = " << buffer << " bytesTransferred_ = " << bytesTransferred_ << " bytes = " << bytes
             << std::endl;
 
-  if (bytes != 0) DoOnRead(bytes);
+  if (bytes != 0) {
+    DoOnRead(bytes);
+  } else {
+    OnClose();
+    return;  // client close normally
+  }
 
   auto res = WSARecv(fd_, (LPWSABUF)&buf_, 1, &bytesTransferred_, &flag_, &overlapped_, nullptr);
   auto err = WSAGetLastError();

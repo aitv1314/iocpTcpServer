@@ -29,4 +29,4 @@ def connect_to_server(ip, port):
         client_socket.close()
 
 if __name__ == "__main__":
-    connect_to_server('172.27.224.1', 44818)
+    connect_to_server('192.168.1.234', 44818)
